@@ -1,0 +1,7 @@
+server: 
+
+java -jar Server-0.0.1-SNAPSHOT.jar 8888 "C:\Users\luciano\Desktop\TTP Level2 Solution\database.sqlite3" "C:\Users\luciano\Desktop\TTP Level2 Solution\Output\ExternalOutput.txt"
+
+client: 
+
+java -jar Client-0.0.1-SNAPSHOT.jar localhost 8888 "C:\Users\luciano\Desktop\TTP Level2 Solution\Input\ExternalInput.txt"
