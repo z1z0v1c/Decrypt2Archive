@@ -1,14 +1,6 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package db;
+package database;
 
-import fileprocessor.impl.TXTFileProcessor;
-import fileprocessor.impl.XLSXFileProcessor;
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -96,15 +88,4 @@ public final class DBConnection {
             System.out.println(e.getMessage());
         }
     }
-
-    /**
-     * @param args the command line arguments
-     */
-//    public static void main(String[] args) {
-//        DBConnection dbCon = new DBConnection("C:\\Users\\luciano\\Desktop\\TTP Level2\\database.sqlite3");
-//        dbCon.selectKey();
-//        dbCon.selectKeyForXLSX();
-//        dbCon.createNewTable("actions");
-//        dbCon.logToDatabase("test", new Date(System.currentTimeMillis()).toString());
-//    }
 }

@@ -1,10 +1,9 @@
 package server;
 
-import db.DBConnection;
+import database.DBConnection;
 import encryption.Encryptor;
 import java.net.*;
 import java.io.*;
-
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;

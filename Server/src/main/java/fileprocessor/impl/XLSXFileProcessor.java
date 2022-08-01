@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package fileprocessor.impl;
 
 import java.io.File;
@@ -64,7 +59,6 @@ public class XLSXFileProcessor implements FileProcessor {
             Sheet sheet = workbook.createSheet("Sheet 1");
 
             int index = 0;
-//            for (int i = 0; i < rows; i++) {
             int rowNumber = 0;
             while (index < text.size()) {
                 Row row = sheet.createRow(rowNumber);

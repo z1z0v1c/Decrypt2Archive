@@ -1,12 +1,4 @@
-
 import client.Client;
-
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 
 /**
  *
@@ -15,7 +7,6 @@ import client.Client;
 public class Application {
 
     public static void main(String args[]) throws Exception {
-
         if (args.length != 3) {
             throw new Exception("Number of args must be 3!");
         }
@@ -25,7 +16,7 @@ public class Application {
         try {
             portNumber = Integer.parseInt(args[1]);
         } catch (NumberFormatException e) {
-            throw new Exception("Second argument must be number");
+            throw new Exception("Second argument must be a number");
         }
         String pathToInputDir = args[2];       
         
