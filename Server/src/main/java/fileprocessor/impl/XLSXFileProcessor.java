@@ -10,7 +10,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.CreationHelper;
 import org.apache.poi.ss.usermodel.DataFormatter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
@@ -20,51 +19,57 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import fileprocessor.FileProcessor;
 
 /**
- *
- * @author luciano
+ * @author Aleksndar Zizovic
  */
 public class XLSXFileProcessor implements FileProcessor {
 
     public List<String> getTextFromFile(String path) {
         File source = new File(path);
         List<String> text = new ArrayList<>();
+
         try {
             Workbook workbook = WorkbookFactory.create(source);
             DataFormatter dataFormatter = new DataFormatter();
+
             for (Sheet sheet : workbook) {
                 for (Row row : sheet) {
                     for (Cell cell : row) {
                         text.add(dataFormatter.formatCellValue(cell));
                     }
+
                     System.out.println();
                 }
             }
-        } catch (IOException ex) {
-            Logger.getLogger(XLSXFileProcessor.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (EncryptedDocumentException ex) {
+        } catch (IOException | EncryptedDocumentException ex) {
             Logger.getLogger(XLSXFileProcessor.class.getName()).log(Level.SEVERE, null, ex);
         }
+
         return text;
     }
 
     public void printToFile(String path, List<String> text) {
-        File output = new File(path);
-        FileOutputStream fileOut;
         int columns = 3;
+        FileOutputStream fileOut;
+        File output = new File(path);
+
         try {
             fileOut = new FileOutputStream(output);
-
             Workbook workbook = new XSSFWorkbook();
-            CreationHelper createHelper = workbook.getCreationHelper();
+
+            workbook.getCreationHelper();
+
             Sheet sheet = workbook.createSheet("Sheet 1");
 
             int index = 0;
             int rowNumber = 0;
+
             while (index < text.size()) {
                 Row row = sheet.createRow(rowNumber);
+
                 for (int j = 0; j < columns; j++) {
                     row.createCell(j).setCellValue(text.get(index));
                     index++;
+
                     if (index % columns == 0) {
                         rowNumber++;
                     }

@@ -4,7 +4,7 @@ import java.util.List;
 
 /**
  *
- * @author luciano
+ * @author Aleksndar Zizovic
  */
 public interface FileProcessor {
     List<String> getTextFromFile(String path);
