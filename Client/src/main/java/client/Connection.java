@@ -13,7 +13,9 @@ public class Connection {
 
     public Connection(String address, int port) throws IOException {
         try {
+            // Establish a connection
             this.socket = new Socket(address, port);
+            // Get data streams
             this.output = new DataOutputStream(socket.getOutputStream());
             this.input = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
         } catch (IllegalArgumentException | UnknownHostException ex) {
