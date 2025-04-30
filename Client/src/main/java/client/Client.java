@@ -18,17 +18,16 @@ public class Client {
 
             // Sends request data
             output = new DataOutputStream(socket.getOutputStream());
+
+            // Gets response message
+            input = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
         } catch (IllegalArgumentException | UnknownHostException ex) {
             throw new IllegalArgumentException("Illegal argument: " + ex.getMessage());
         }
     }
 
     public String sendRequest(String data) throws IOException {
-        // Send request data
         output.writeUTF(data);
-
-        // Gets response message
-        input = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
 
         return input.readUTF();
     }
