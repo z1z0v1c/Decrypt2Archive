@@ -1,13 +1,12 @@
 import server.Server;
 
 /**
- *
  * @author Aleksandar Zizovic
  */
 public class Application {
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
         if (args.length != 3) {
-            throw new Exception("Number of args must be 3!");
+            throw new IllegalArgumentException("Number of args must be 3!");
         }
 
         int portNumber;
@@ -15,7 +14,7 @@ public class Application {
         try {
             portNumber = Integer.parseInt(args[0]);
         } catch (NumberFormatException e) {
-            throw new Exception("Second argument must be number");
+            throw new IllegalArgumentException("Second argument must be number");
         }
 
         String pathToDatabase = args[1];

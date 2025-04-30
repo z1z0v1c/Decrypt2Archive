@@ -16,7 +16,7 @@ import fileprocessor.FileProcessor;
  */
 public class TXTFileProcessor implements FileProcessor {
 
-    public List<String> getTextFromFile(String path) {
+    public List<String> getTextFromFile(String path) throws FileNotFoundException {
         Scanner in;
         File source = new File(path);
         List<String> text = new ArrayList<>();
@@ -29,6 +29,7 @@ public class TXTFileProcessor implements FileProcessor {
             }
         } catch (FileNotFoundException ex) {
             Logger.getLogger(TXTFileProcessor.class.getName()).log(Level.SEVERE, null, ex);
+            throw ex;
         }
 
         return text;

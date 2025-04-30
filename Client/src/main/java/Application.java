@@ -23,7 +23,7 @@ public class Application {
         Client client = new Client();
         client.connect(serverAddress, portNumber);
 
-        String response = client.sendDataToServer(pathToInputDir);
+        String response = client.requestData(pathToInputDir);
         System.out.println(response);
 
         client.disconnect();

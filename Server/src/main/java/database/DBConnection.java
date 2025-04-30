@@ -1,5 +1,6 @@
 package database;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -32,7 +33,7 @@ public final class DBConnection {
     /**
      * select all rows in the warehouses table
      */
-    public String selectKey(String file) throws Exception {
+    public String selectKey(String file) throws IOException {
         String extension;
 
         if (file.endsWith("txt")) {
@@ -40,7 +41,7 @@ public final class DBConnection {
         } else if (file.endsWith("xlsx")) {
             extension = "xlsx";
         } else {
-            throw new Exception("Wrong extension");
+            throw new IOException("Wrong extension");
         }
 
         String sql = "SELECT KEY FROM AES_KEYS WHERE FILE='ExternalInput." + extension + "'";

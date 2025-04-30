@@ -7,9 +7,9 @@ import java.io.*;
  * @author Aleksandar Zizovic
  */
 public class Client {
-    private Socket socket = null;
-    private DataInputStream input = null;
-    private DataOutputStream out = null;
+    private Socket socket;
+    private DataInputStream input;
+    private DataOutputStream output;
 
     public void connect(String address, int port) {
         // Establish a connection
@@ -18,7 +18,7 @@ public class Client {
             System.out.println("Connected");
 
             // Sends output to the socket
-            out = new DataOutputStream(socket.getOutputStream());
+            output = new DataOutputStream(socket.getOutputStream());
         } catch (UnknownHostException u) {
             System.out.println(u);
         } catch (IOException i) {
@@ -26,24 +26,21 @@ public class Client {
         }
     }
 
-    public String sendDataToServer(String data) {
-        String response = "";
-
+    public String requestData(String data) {
         try {
-            out.writeUTF(data);
+            output.writeUTF(data);
             input = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
-            response = input.readUTF();
-        } catch (IOException i) {
-            System.out.println(i);
-        }
 
-        return response;
+            return input.readUTF();
+        } catch (IOException i) {
+            return i.getMessage();
+        }
     }
 
     public void disconnect() {
         try {
             input.close();
-            out.close();
+            output.close();
             socket.close();
         } catch (IOException i) {
             System.out.println(i);

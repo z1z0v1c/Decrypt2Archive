@@ -28,7 +28,7 @@ public class Server {
         dbConnection = new DBConnection(pathToDatabase);
     }
 
-    public void start(int port, String pathToOutputDir) throws Exception {
+    public void start(int port, String pathToOutputDir) {
         String pathToInputDir = "";
 
         try {
@@ -53,9 +53,16 @@ public class Server {
             Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        fileDecryption(pathToInputDir, pathToOutputDir);
+        try {
+            fileDecryption(pathToInputDir, pathToOutputDir);
 
-        ZipDirectory.zipDirectory(pathToOutputDir);
+            ZipDirectory.zipDirectory(pathToOutputDir);
+
+            output.writeUTF("Success");
+        } catch (IOException ex) {
+            output.writeUTF(ex.getMessage());
+            dbConnection.logToDatabase("IOException", new Date(System.currentTimeMillis()).toString());
+        }
 
         output.writeUTF("Success");
         dbConnection.logToDatabase("Success", new Date(System.currentTimeMillis()).toString());
@@ -63,7 +70,7 @@ public class Server {
         disconnect();
     }
 
-    public void fileDecryption(String pathToInputDir, String pathToOutputDir) throws Exception {
+    public void fileDecryption(String pathToInputDir, String pathToOutputDir) throws IOException {
         File file = new File(pathToOutputDir);
 
         if (!file.exists()) {
@@ -110,8 +117,8 @@ public class Server {
 
         dbConnection.logToDatabase("Closing connection", LocalDateTime.now().toString());
 
+        // Close the connection
         try {
-            // Close connection
             socket.close();
             serverSocket.close();
             input.close();
