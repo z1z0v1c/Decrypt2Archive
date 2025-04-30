@@ -11,39 +11,31 @@ public class Client {
     private DataInputStream input;
     private DataOutputStream output;
 
-    public void connect(String address, int port) {
-        // Establish a connection
+    public void connect(String address, int port) throws IOException {
         try {
+            // Establish a connection
             socket = new Socket(address, port);
-            System.out.println("Connected");
 
-            // Sends output to the socket
+            // Sends request data
             output = new DataOutputStream(socket.getOutputStream());
-        } catch (UnknownHostException u) {
-            System.out.println(u);
-        } catch (IOException i) {
-            System.out.println(i);
+        } catch (IllegalArgumentException | UnknownHostException ex) {
+            throw new IllegalArgumentException("Illegal argument: " + ex.getMessage());
         }
     }
 
-    public String requestData(String data) {
-        try {
-            output.writeUTF(data);
-            input = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
+    public String sendRequest(String data) throws IOException {
+        // Send request data
+        output.writeUTF(data);
 
-            return input.readUTF();
-        } catch (IOException i) {
-            return i.getMessage();
-        }
+        // Gets response message
+        input = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
+
+        return input.readUTF();
     }
 
-    public void disconnect() {
-        try {
-            input.close();
-            output.close();
-            socket.close();
-        } catch (IOException i) {
-            System.out.println(i);
-        }
+    public void disconnect() throws IOException {
+        input.close();
+        output.close();
+        socket.close();
     }
 }
