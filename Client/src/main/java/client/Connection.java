@@ -13,23 +13,23 @@ public class Connection {
 
     public Connection(String address, int port) throws IOException {
         try {
-            socket = new Socket(address, port);
-            output = new DataOutputStream(socket.getOutputStream());
-            input = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
+            this.socket = new Socket(address, port);
+            this.output = new DataOutputStream(socket.getOutputStream());
+            this.input = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
         } catch (IllegalArgumentException | UnknownHostException ex) {
             throw new IllegalArgumentException("Illegal argument: " + ex.getMessage());
         }
     }
 
     public String sendRequest(String data) throws IOException {
-        output.writeUTF(data);
+        this.output.writeUTF(data);
 
-        return input.readUTF();
+        return this.input.readUTF();
     }
 
     public void disconnect() throws IOException {
-        input.close();
-        output.close();
-        socket.close();
+        this.input.close();
+        this.output.close();
+        this.socket.close();
     }
 }
