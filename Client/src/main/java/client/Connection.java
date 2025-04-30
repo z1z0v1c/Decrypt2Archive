@@ -6,20 +6,15 @@ import java.io.*;
 /**
  * @author Aleksandar Zizovic
  */
-public class Client {
-    private Socket socket;
-    private DataInputStream input;
-    private DataOutputStream output;
+public class Connection {
+    private final Socket socket;
+    private final DataInputStream input;
+    private final DataOutputStream output;
 
-    public void connect(String address, int port) throws IOException {
+    public Connection(String address, int port) throws IOException {
         try {
-            // Establish a connection
             socket = new Socket(address, port);
-
-            // Sends request data
             output = new DataOutputStream(socket.getOutputStream());
-
-            // Gets response message
             input = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
         } catch (IllegalArgumentException | UnknownHostException ex) {
             throw new IllegalArgumentException("Illegal argument: " + ex.getMessage());

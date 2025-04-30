@@ -1,4 +1,4 @@
-import client.Client;
+import client.Connection;
 
 import java.io.IOException;
 import java.util.logging.Level;
@@ -31,24 +31,22 @@ public class Application {
 
         String pathToInputDir = args[2];
 
-        Client client = new Client();
-
         try {
             logger.log(Level.INFO, "Connecting to the server...");
 
             // Connect to the server
-            client.connect(serverAddress, portNumber);
+            Connection connection = new Connection(serverAddress, portNumber);
 
             logger.log(Level.INFO, "Connected.");
 
             // Send data to the server and receive the response
-            String response = client.sendRequest(pathToInputDir);
+            String response = connection.sendRequest(pathToInputDir);
 
             logger.log(Level.INFO, String.format("Response: %s", response));
             logger.log(Level.INFO, "Disconnecting and closing the application...");
 
             // Close all client resources
-            client.disconnect();
+            connection.disconnect();
         } catch (IllegalArgumentException | IOException ex) {
             logger.log(Level.SEVERE, ex.getMessage());
             System.exit(1);
