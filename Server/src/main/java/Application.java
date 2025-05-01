@@ -1,6 +1,6 @@
 import picocli.CommandLine;
 import picocli.CommandLine.Option;
-import server.Server;
+import server.Connection;
 
 import java.io.IOException;
 
@@ -21,9 +21,9 @@ public class Application implements Runnable {
 
     @Override
     public void run() {
-        Server server = new Server(pathToDatabase);
+        Connection connection = new Connection(pathToDatabase);
         try {
-            server.start(portNumber, pathToOutputDir);
+            connection.start(portNumber, pathToOutputDir);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

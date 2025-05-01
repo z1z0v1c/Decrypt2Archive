@@ -17,14 +17,14 @@ import util.ZipDirectory;
 import fileprocessor.FileProcessor;
 import fileprocessor.FileProcessorFactory;
 
-public class Server {
+public class Connection {
     private Socket socket;
     private ServerSocket serverSocket;
     private DataInputStream input;
     private DataOutputStream output;
     private final DBConnection dbConnection;
 
-    public Server(String pathToDatabase) {
+    public Connection(String pathToDatabase) {
         dbConnection = new DBConnection(pathToDatabase);
     }
 
@@ -50,7 +50,7 @@ public class Server {
 
             System.out.println(pathToInputDir);
         } catch (IOException ex) {
-            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
         }
 
         try {
@@ -127,7 +127,7 @@ public class Server {
         } catch (IOException i) {
             System.out.println(i);
         } catch (SQLException ex) {
-            Logger.getLogger(Server.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Connection.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }
