@@ -37,7 +37,7 @@ public class Client implements Runnable {
         logger.log(Level.INFO, "Connecting to the server...");
 
         try {
-            connection = new Connection(this.serverAddress, this.portNumber);
+            connection = new Connection(serverAddress, portNumber);
         } catch (IOException ex) {
             logger.log(Level.SEVERE, ex.getMessage());
             System.exit(1);
@@ -50,7 +50,7 @@ public class Client implements Runnable {
         String response = Strings.EMPTY;
 
         try {
-            response = connection.sendRequest(this.inputDirectory);
+            response = connection.sendRequest(inputDirectory);
         } catch (IOException ex) {
             logger.log(Level.SEVERE, ex.getMessage());
             System.exit(1);
