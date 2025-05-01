@@ -1,6 +1,7 @@
 package client;
 
 import java.io.IOException;
+import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -38,8 +39,11 @@ public class Client implements Runnable {
 
         try {
             connection = new Connection(serverAddress, portNumber);
+        } catch (IllegalArgumentException | UnknownHostException ex) {
+            logger.log(Level.SEVERE, String.format("Invalid argument: %s", ex.getMessage()));
         } catch (IOException ex) {
             logger.log(Level.SEVERE, ex.getMessage());
+        } finally {
             System.exit(1);
         }
 
@@ -47,6 +51,8 @@ public class Client implements Runnable {
     }
 
     public void sendInputDirectory() {
+        logger.log(Level.INFO, "Sending request to the server...");
+
         String response = Strings.EMPTY;
 
         try {

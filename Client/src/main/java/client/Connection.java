@@ -11,7 +11,7 @@ public class Connection {
     private final DataInputStream input;
     private final DataOutputStream output;
 
-    public Connection(String address, int port) throws IllegalArgumentException, IOException {
+    public Connection(String address, int port) throws IOException {
         socket = new Socket(address, port);
         output = new DataOutputStream(socket.getOutputStream());
         input = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
