@@ -28,7 +28,7 @@ public class Server {
         dbConnection = new DBConnection(pathToDatabase);
     }
 
-    public void start(int port, String pathToOutputDir) {
+    public void start(int port, String pathToOutputDir) throws IOException {
         String pathToInputDir = "";
 
         try {
