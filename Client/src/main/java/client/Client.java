@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import jdk.internal.joptsimple.internal.Strings;
 import picocli.CommandLine.Option;
 
 /**
@@ -18,30 +19,56 @@ public class Client implements Runnable {
     @Option(names = {"-p", "--port-number"}, defaultValue = "8888", description = "Server port number")
     private int portNumber;
 
-    @Option(names = {"-i", "--input-directory"}, description = "Path to the input directory on the server")
+    @Option(names = {"-i", "--input-directory"}, required = true, description = "Path to the input directory on the server")
     private String inputDirectory;
+
+    private Connection connection;
 
     @Override
     public void run() {
+        connectToTheServer();
+
+        sendInputDirectory();
+
+        disconnectFromTheServer();
+    }
+
+    public void connectToTheServer() {
+        logger.log(Level.INFO, "Connecting to the server...");
+
         try {
-            logger.log(Level.INFO, "Connecting to the server...");
-
-            // Connect to the server
-            Connection connection = new Connection(this.serverAddress, this.portNumber);
-
-            logger.log(Level.INFO, "Connected.");
-
-            // Send data to the server and receive the response
-            String response = connection.sendRequest(this.inputDirectory);
-
-            logger.log(Level.INFO, String.format("Response: %s", response));
-            logger.log(Level.INFO, "Disconnecting and closing the application...");
-
-            // Close all client resources
-            connection.disconnect();
-        } catch (IllegalArgumentException | IOException ex) {
+            connection = new Connection(this.serverAddress, this.portNumber);
+        } catch (IOException ex) {
             logger.log(Level.SEVERE, ex.getMessage());
             System.exit(1);
         }
+
+        logger.log(Level.INFO, "Connection established.");
+    }
+
+    public void sendInputDirectory() {
+        String response = Strings.EMPTY;
+
+        try {
+            response = connection.sendRequest(this.inputDirectory);
+        } catch (IOException ex) {
+            logger.log(Level.SEVERE, ex.getMessage());
+            System.exit(1);
+        }
+
+        logger.log(Level.INFO, String.format("Response: %s", response));
+    }
+
+    public void disconnectFromTheServer() {
+        logger.log(Level.INFO, "Disconnecting from the server...");
+
+        try {
+            connection.disconnect();
+        } catch (IOException ex) {
+            logger.log(Level.SEVERE, ex.getMessage());
+            System.exit(1);
+        }
+
+        logger.log(Level.INFO, "Disconnected successfully.");
     }
 }
