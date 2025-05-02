@@ -11,10 +11,10 @@ import java.sql.Statement;
 /**
  * @author Aleksandar Zizovic
  */
-public final class DBConnection {
+public final class DatabaseConnection {
     private Connection connection;
 
-    public DBConnection(String path) {
+    public DatabaseConnection(String path) {
         try {
             connection = DriverManager.getConnection("jdbc:sqlite:" + path);
 

@@ -41,9 +41,9 @@ public class Client implements Runnable {
             connection = new Connection(serverAddress, portNumber);
         } catch (IllegalArgumentException | UnknownHostException ex) {
             logger.log(Level.SEVERE, String.format("Invalid argument: %s", ex.getMessage()));
+            System.exit(1);
         } catch (IOException ex) {
             logger.log(Level.SEVERE, ex.getMessage());
-        } finally {
             System.exit(1);
         }
 
