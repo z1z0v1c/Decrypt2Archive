@@ -5,7 +5,7 @@ import encryption.Encryptor;
 import fileprocessor.FileProcessor;
 import fileprocessor.FileProcessorFactory;
 import picocli.CommandLine.Option;
-import util.ZipDirectory;
+import util.Zipper;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,12 +29,14 @@ public class Server implements Runnable {
 
     private SocketConnection socketConnection;
     private DatabaseConnection databaseConnection;
+    private Zipper zipper;
 
     @Override
     public void run() {
         try {
             createDatabaseConnection();
             createSocketConnection();
+            zipper = new Zipper();
 
             acceptClient();
 
@@ -47,8 +49,7 @@ public class Server implements Runnable {
 
             writeText(decryptedText, pathToOutputDir);
 
-            ZipDirectory.zipDirectory(pathToOutputDir);
-
+            zipper.zipDirectory(pathToOutputDir);
 
             socketConnection.sendResponse("Success");
             databaseConnection.logToDatabase("Success", new Date(System.currentTimeMillis()).toString());
@@ -57,8 +58,6 @@ public class Server implements Runnable {
 
             databaseConnection.logToDatabase("Closing connection", new Date(System.currentTimeMillis()).toString());
             databaseConnection.close();
-
-
         } catch (IOException ex) {
             try {
                 socketConnection.sendResponse(ex.getMessage());
@@ -140,6 +139,7 @@ public class Server implements Runnable {
         } catch (IOException e) {
             databaseConnection.logToDatabase("IOException", new Date(System.currentTimeMillis()).toString());
         }
+
         System.out.println("Decrypted file path: " + pathToOutputDir);
         databaseConnection.logToDatabase("Decrypted file path: " + pathToOutputDir, new Date(System.currentTimeMillis()).toString());
     }

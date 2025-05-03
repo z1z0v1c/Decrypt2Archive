@@ -10,8 +10,8 @@ import java.util.zip.ZipOutputStream;
 /**
  * @author Aleksndar Zizovic
  */
-public class ZipDirectory {
-    public static void zipDirectory(String path) throws IOException {
+public class Zipper {
+    public void zipDirectory(String path) throws IOException {
         File fileToZip = new File(path).getParentFile();
 
         try (FileOutputStream fos = new FileOutputStream(fileToZip.getParentFile().getPath() + "\\Output.zip"); 
@@ -20,7 +20,7 @@ public class ZipDirectory {
         }
     }
  
-    private static void zipFile(File fileToZip, String fileName, ZipOutputStream zipOut) throws IOException {
+    private void zipFile(File fileToZip, String fileName, ZipOutputStream zipOut) throws IOException {
         if (fileToZip.isHidden()) {
             return;
         }
