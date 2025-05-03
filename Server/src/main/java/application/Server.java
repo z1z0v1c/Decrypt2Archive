@@ -2,8 +2,10 @@ package application;
 
 import database.DatabaseConnection;
 import file.encryptor.FileEncryptor;
-import file.processor.FileProcessor;
-import file.processor.FileProcessorFactory;
+import file.reader.FileReader;
+import file.reader.FileReaderFactory;
+import file.writer.FileWriter;
+import file.writer.FileWriterFactory;
 import network.SocketConnection;
 import picocli.CommandLine.Option;
 import file.zipper.FileZipper;
@@ -29,8 +31,9 @@ public class Server implements Runnable {
     private SocketConnection socketConnection;
     private DatabaseConnection databaseConnection;
     private FileZipper fileZipper;
-    private FileEncryptor encryptor;
-    private FileProcessor fileProcessor;
+    private FileEncryptor fileEncryptor;
+    private FileReader fileReader;
+    private FileWriter fileWriter;
 
     @Override
     public void run() {
@@ -47,20 +50,20 @@ public class Server implements Runnable {
             databaseConnection.log("Client accepted", new Date(System.currentTimeMillis()).toString());
 
             fileZipper = new FileZipper();
-            encryptor = new FileEncryptor();
+            fileEncryptor = new FileEncryptor();
 
             String inputDirectory = socketConnection.getInputDirectory();
             String key = databaseConnection.selectKey(inputDirectory);
 
-            fileProcessor = FileProcessorFactory.getFileProcessor(inputDirectory);
+            fileReader = FileReaderFactory.createFileReader(inputDirectory);
 
-            List<String> text = fileProcessor.readText(inputDirectory);
+            List<String> text = fileReader.readText(inputDirectory);
 
-            List<String> decryptedText = encryptor.decrypt(text, key);
+            List<String> decryptedText = fileEncryptor.decrypt(text, key);
 
-            fileProcessor = FileProcessorFactory.getFileProcessor(pathToOutputDir);
+            fileWriter = FileWriterFactory.createFileWriter(pathToOutputDir);
 
-            fileProcessor.writeText(pathToOutputDir, decryptedText);
+            fileWriter.writeText(pathToOutputDir, decryptedText);
 
             fileZipper.zipDirectory(pathToOutputDir);
 
