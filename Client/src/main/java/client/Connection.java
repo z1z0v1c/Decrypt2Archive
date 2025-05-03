@@ -17,7 +17,7 @@ public class Connection {
         input = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
     }
 
-    public String sendRequest(String data) throws IOException {
+    public String sendData(String data) throws IOException {
         output.writeUTF(data);
         return input.readUTF();
     }
