@@ -1,5 +1,5 @@
 import picocli.CommandLine;
-import server.Server;
+import application.Server;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;

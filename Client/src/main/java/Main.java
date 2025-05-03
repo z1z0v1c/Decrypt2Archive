@@ -1,4 +1,4 @@
-import client.Client;
+import application.Client;
 import picocli.CommandLine;
 
 import java.util.logging.Level;
