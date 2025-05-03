@@ -6,7 +6,7 @@ import java.io.*;
 /**
  * @author Aleksandar Zizovic
  */
-public class SocketConnection {
+public class SocketConnection implements Closeable {
     private final Socket socket;
     private final DataInputStream input;
     private final DataOutputStream output;
@@ -23,7 +23,8 @@ public class SocketConnection {
         return input.readUTF();
     }
 
-    public void disconnect() throws IOException {
+    @Override
+    public void close() throws IOException {
         input.close();
         output.close();
         socket.close();

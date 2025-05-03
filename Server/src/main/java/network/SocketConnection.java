@@ -3,7 +3,7 @@ package network;
 import java.net.*;
 import java.io.*;
 
-public class SocketConnection {
+public class SocketConnection implements Closeable {
     private Socket socket;
     private ServerSocket serverSocket;
     private DataInputStream input;
@@ -38,7 +38,8 @@ public class SocketConnection {
         output.writeUTF(message);
     }
 
-    public void disconnect() {
+    @Override
+    public void close() throws IOException {
         System.out.println("Closing connection");
 
         // Close the connection

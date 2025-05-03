@@ -56,7 +56,7 @@ public class Server implements Runnable {
             socketConnection.sendResponse("Success");
             databaseConnection.logToDatabase("Success", new Date(System.currentTimeMillis()).toString());
 
-            socketConnection.disconnect();
+            socketConnection.close();
 
             databaseConnection.logToDatabase("Closing connection", new Date(System.currentTimeMillis()).toString());
             databaseConnection.close();

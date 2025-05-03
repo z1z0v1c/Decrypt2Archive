@@ -43,7 +43,8 @@ public class Client implements Runnable {
             logger.log(Level.INFO, "Disconnecting from the server...");
 
             // Disconnect from the server and close resources
-            socketConnection.disconnect();
+            // Not using auto-closeable intentionally
+            socketConnection.close();
 
             logger.log(Level.INFO, "Disconnected successfully.");
         } catch (IllegalArgumentException | UnknownHostException ex) {
