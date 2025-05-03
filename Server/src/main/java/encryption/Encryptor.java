@@ -8,7 +8,9 @@ import java.nio.charset.StandardCharsets;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Base64;
+import java.util.List;
 import javax.crypto.BadPaddingException;
 import javax.crypto.Cipher;
 import javax.crypto.IllegalBlockSizeException;
@@ -76,5 +78,16 @@ public class Encryptor {
         }
 
         return null;
+    }
+
+    public List<String> decrypt(List<String> text, String key) {
+        List<String> decryptedText = new ArrayList<>();
+
+        for (String word : text) {
+            String decryptedTXT = Encryptor.decrypt(key, word);
+            decryptedText.add(decryptedTXT);
+        }
+
+        return decryptedText;
     }
 }

@@ -30,6 +30,7 @@ public class Server implements Runnable {
     private SocketConnection socketConnection;
     private DatabaseConnection databaseConnection;
     private Zipper zipper;
+    private Encryptor encryptor;
 
     @Override
     public void run() {
@@ -37,6 +38,7 @@ public class Server implements Runnable {
             createDatabaseConnection();
             createSocketConnection();
             zipper = new Zipper();
+            encryptor = new Encryptor();
 
             acceptClient();
 
@@ -45,7 +47,7 @@ public class Server implements Runnable {
 
             List<String> text = readFile(inputDirectory);
 
-            List<String> decryptedText = decrypt(text, key);
+            List<String> decryptedText = encryptor.decrypt(text, key);
 
             writeText(decryptedText, pathToOutputDir);
 
@@ -120,16 +122,6 @@ public class Server implements Runnable {
         return text;
     }
 
-    public List<String> decrypt(List<String> text, String key) {
-        List<String> decryptedText = new ArrayList<>();
-
-        for (String word : text) {
-            String decryptedTXT = Encryptor.decrypt(key, word);
-            decryptedText.add(decryptedTXT);
-        }
-
-        return decryptedText;
-    }
 
     public void writeText(List<String> text, String outputDirectory) {
         try {
