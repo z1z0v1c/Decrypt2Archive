@@ -4,13 +4,13 @@ import database.DatabaseConnection;
 import encryption.Encryptor;
 import fileprocessor.FileProcessor;
 import fileprocessor.FileProcessorFactory;
+import network.SocketConnection;
 import picocli.CommandLine.Option;
 import util.Zipper;
 
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 

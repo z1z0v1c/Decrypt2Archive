@@ -5,6 +5,7 @@ import java.net.UnknownHostException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import network.SocketConnection;
 import picocli.CommandLine.Option;
 
 /**
@@ -22,7 +23,7 @@ public class Client implements Runnable {
     @Option(names = {"-i", "--input-directory"}, required = true, description = "Path to the input directory on the server")
     private String inputDirectory;
 
-    private Connection connection;
+    private SocketConnection socketConnection;
 
     @Override
     public void run() {
@@ -30,19 +31,19 @@ public class Client implements Runnable {
             logger.log(Level.INFO, "Connecting to the server...");
 
             // Connect to the server
-            connection = new Connection(serverAddress, portNumber);
+            socketConnection = new SocketConnection(serverAddress, portNumber);
 
             logger.log(Level.INFO, "Connection established.");
             logger.log(Level.INFO, "Sending request to the server...");
 
             // Send input directory
-            String response = connection.sendData(inputDirectory);
+            String response = socketConnection.sendData(inputDirectory);
 
             logger.log(Level.INFO, String.format("Response: %s", response));
             logger.log(Level.INFO, "Disconnecting from the server...");
 
             // Disconnect from the server and close resources
-            connection.disconnect();
+            socketConnection.disconnect();
 
             logger.log(Level.INFO, "Disconnected successfully.");
         } catch (IllegalArgumentException | UnknownHostException ex) {
