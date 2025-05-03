@@ -82,7 +82,7 @@ public final class DatabaseConnection {
         }
     }
 
-    public void logToDatabase(String action, String date) {
+    public void log(String action, String date) {
         String sql = "INSERT INTO actions(action,date) VALUES(?,?)";
 
         try {

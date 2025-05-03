@@ -15,8 +15,7 @@ import fileprocessor.FileProcessor;
  * @author Aleksndar Zizovic
  */
 public class TXTFileProcessor implements FileProcessor {
-
-    public List<String> getTextFromFile(String path) throws FileNotFoundException {
+    public List<String> readText(String path) throws FileNotFoundException {
         Scanner in;
         File source = new File(path);
         List<String> text = new ArrayList<>();
@@ -35,7 +34,7 @@ public class TXTFileProcessor implements FileProcessor {
         return text;
     }
 
-    public void printToFile(String path, List<String> text) {
+    public void writeText(String path, List<String> text) {
         File output = new File(path);
 
         try {

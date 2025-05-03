@@ -35,7 +35,7 @@ public class Encryptor {
      * @param value Value to be encrypted
      * @return encrypted content
      */
-    public static String encrypt(String key, String value) {
+    private String encrypt(String key, String value) {
         try {
             IvParameterSpec iv = new IvParameterSpec(INIT_VECTOR.getBytes(StandardCharsets.UTF_8));
             SecretKeySpec skeySpec = new SecretKeySpec(key.getBytes(StandardCharsets.UTF_8), "AES");
@@ -61,7 +61,7 @@ public class Encryptor {
      * @param encrypted Value to be decrypted
      * @return decrypted content
      */
-    public static String decrypt(String key, String encrypted) {
+    private String decrypt(String key, String encrypted) {
         try {
             IvParameterSpec iv = new IvParameterSpec(INIT_VECTOR.getBytes(StandardCharsets.UTF_8));
             SecretKeySpec skeySpec = new SecretKeySpec(key.getBytes(StandardCharsets.UTF_8), "AES");
@@ -84,7 +84,7 @@ public class Encryptor {
         List<String> decryptedText = new ArrayList<>();
 
         for (String word : text) {
-            String decryptedTXT = Encryptor.decrypt(key, word);
+            String decryptedTXT = decrypt(key, word);
             decryptedText.add(decryptedTXT);
         }
 

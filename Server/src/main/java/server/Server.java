@@ -8,7 +8,6 @@ import network.SocketConnection;
 import picocli.CommandLine.Option;
 import util.Zipper;
 
-import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Date;
@@ -31,34 +30,46 @@ public class Server implements Runnable {
     private DatabaseConnection databaseConnection;
     private Zipper zipper;
     private Encryptor encryptor;
+    private FileProcessor fileProcessor;
 
     @Override
     public void run() {
         try {
-            createDatabaseConnection();
-            createSocketConnection();
+            databaseConnection = new DatabaseConnection(pathToDatabase);
+
+            databaseConnection.log("Starting the server...", new Date(System.currentTimeMillis()).toString());
+
+            socketConnection = new SocketConnection(portNumber);
+
+            databaseConnection.log("Server started", new Date(System.currentTimeMillis()).toString());
+
+            socketConnection.acceptClient();
+            databaseConnection.log("Client accepted", new Date(System.currentTimeMillis()).toString());
+
             zipper = new Zipper();
             encryptor = new Encryptor();
-
-            acceptClient();
 
             String inputDirectory = socketConnection.getInputDirectory();
             String key = databaseConnection.selectKey(inputDirectory);
 
-            List<String> text = readFile(inputDirectory);
+            fileProcessor = FileProcessorFactory.getFileProcessor(inputDirectory);
+
+            List<String> text = fileProcessor.readText(inputDirectory);
 
             List<String> decryptedText = encryptor.decrypt(text, key);
 
-            writeText(decryptedText, pathToOutputDir);
+            fileProcessor = FileProcessorFactory.getFileProcessor(pathToOutputDir);
+
+            fileProcessor.writeText(pathToOutputDir, decryptedText);
 
             zipper.zipDirectory(pathToOutputDir);
 
             socketConnection.sendResponse("Success");
-            databaseConnection.logToDatabase("Success", new Date(System.currentTimeMillis()).toString());
+            databaseConnection.log("Success", new Date(System.currentTimeMillis()).toString());
 
             socketConnection.close();
 
-            databaseConnection.logToDatabase("Closing connection", new Date(System.currentTimeMillis()).toString());
+            databaseConnection.log("Closing connection", new Date(System.currentTimeMillis()).toString());
             databaseConnection.close();
         } catch (IOException ex) {
             try {
@@ -66,73 +77,10 @@ public class Server implements Runnable {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            databaseConnection.logToDatabase("IOException", new Date(System.currentTimeMillis()).toString());
+            databaseConnection.log("IOException", new Date(System.currentTimeMillis()).toString());
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public void createDatabaseConnection() {
-        databaseConnection = new DatabaseConnection(pathToDatabase);
-    }
-
-    public void createSocketConnection() {
-        databaseConnection.logToDatabase("Starting the server...", new Date(System.currentTimeMillis()).toString());
-
-        try {
-            socketConnection = new SocketConnection(portNumber);
-        } catch (IOException e) {
-            databaseConnection.logToDatabase("IOException", new Date(System.currentTimeMillis()).toString());
-        }
-
-        databaseConnection.logToDatabase("Server started", new Date(System.currentTimeMillis()).toString());
-    }
-
-    public void acceptClient() {
-        try {
-            socketConnection.acceptClient();
-        } catch (IOException e) {
-            databaseConnection.logToDatabase("IOException", new Date(System.currentTimeMillis()).toString());
-        }
-
-        databaseConnection.logToDatabase("Client accepted", new Date(System.currentTimeMillis()).toString());
-    }
-
-    public List<String> readFile(String pathToInputDir) throws IOException {
-        File file = new File(pathToOutputDir);
-
-        if (!file.exists()) {
-            boolean isCreated = file.getParentFile().mkdirs();
-
-            if (!isCreated) {
-                throw new IOException("Output directory couldn't be created!");
-            }
-        }
-
-        FileProcessor fileProcessor = FileProcessorFactory.getFileProcessor(pathToInputDir);
-
-        System.out.println("Reading file: " + pathToInputDir);
-        databaseConnection.logToDatabase("Reading file: " + pathToInputDir, new Date(System.currentTimeMillis()).toString());
-
-        List<String> text = fileProcessor.getTextFromFile(pathToInputDir);
-
-        System.out.println("File is read: " + pathToInputDir);
-        databaseConnection.logToDatabase("File is read: " + pathToInputDir, new Date(System.currentTimeMillis()).toString());
-
-        return text;
-    }
-
-
-    public void writeText(List<String> text, String outputDirectory) {
-        try {
-            FileProcessor fileProcessor = FileProcessorFactory.getFileProcessor(outputDirectory);
-
-            fileProcessor.printToFile(pathToOutputDir, text);
-        } catch (IOException e) {
-            databaseConnection.logToDatabase("IOException", new Date(System.currentTimeMillis()).toString());
-        }
-
-        System.out.println("Decrypted file path: " + pathToOutputDir);
-        databaseConnection.logToDatabase("Decrypted file path: " + pathToOutputDir, new Date(System.currentTimeMillis()).toString());
-    }
 }

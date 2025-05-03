@@ -8,6 +8,6 @@ import java.util.List;
  * @author Aleksndar Zizovic
  */
 public interface FileProcessor {
-    List<String> getTextFromFile(String path) throws FileNotFoundException;
-    void printToFile(String path, List<String> text);
+    List<String> readText(String path) throws FileNotFoundException;
+    void writeText(String path, List<String> text);
 }

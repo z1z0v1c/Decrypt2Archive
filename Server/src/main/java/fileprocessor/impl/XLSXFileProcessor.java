@@ -22,8 +22,7 @@ import fileprocessor.FileProcessor;
  * @author Aleksndar Zizovic
  */
 public class XLSXFileProcessor implements FileProcessor {
-
-    public List<String> getTextFromFile(String path) {
+    public List<String> readText(String path) {
         File source = new File(path);
         List<String> text = new ArrayList<>();
 
@@ -47,7 +46,7 @@ public class XLSXFileProcessor implements FileProcessor {
         return text;
     }
 
-    public void printToFile(String path, List<String> text) {
+    public void writeText(String path, List<String> text) {
         int columns = 3;
         FileOutputStream fileOut;
         File output = new File(path);
