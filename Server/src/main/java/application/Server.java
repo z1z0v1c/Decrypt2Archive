@@ -1,19 +1,13 @@
 package application;
 
 import database.DatabaseConnection;
-import file.encryptor.FileEncryptor;
-import file.reader.FileReader;
-import file.reader.FileReaderFactory;
-import file.writer.FileWriter;
-import file.writer.FileWriterFactory;
+import file.FileProcessor;
 import network.SocketConnection;
 import picocli.CommandLine.Option;
-import file.zipper.FileZipper;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Date;
-import java.util.List;
 
 /**
  * @author Aleksandar Zizovic
@@ -30,10 +24,7 @@ public class Server implements Runnable {
 
     private SocketConnection socketConnection;
     private DatabaseConnection databaseConnection;
-    private FileZipper fileZipper;
-    private FileEncryptor fileEncryptor;
-    private FileReader fileReader;
-    private FileWriter fileWriter;
+    private FileProcessor fileProcessor;
 
     @Override
     public void run() {
@@ -49,23 +40,12 @@ public class Server implements Runnable {
             socketConnection.acceptClient();
             databaseConnection.log("Client accepted", new Date(System.currentTimeMillis()).toString());
 
-            fileZipper = new FileZipper();
-            fileEncryptor = new FileEncryptor();
-
             String inputDirectory = socketConnection.getInputDirectory();
             String key = databaseConnection.selectKey(inputDirectory);
 
-            fileReader = FileReaderFactory.createFileReader(inputDirectory);
+            fileProcessor = new FileProcessor(inputDirectory, pathToOutputDir);
 
-            List<String> text = fileReader.readText(inputDirectory);
-
-            List<String> decryptedText = fileEncryptor.decrypt(text, key);
-
-            fileWriter = FileWriterFactory.createFileWriter(pathToOutputDir);
-
-            fileWriter.writeText(pathToOutputDir, decryptedText);
-
-            fileZipper.zipDirectory(pathToOutputDir);
+            fileProcessor.process(inputDirectory, pathToOutputDir, key);
 
             socketConnection.sendResponse("Success");
             databaseConnection.log("Success", new Date(System.currentTimeMillis()).toString());

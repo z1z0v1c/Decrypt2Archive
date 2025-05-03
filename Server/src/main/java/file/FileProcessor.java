@@ -1,0 +1,36 @@
+package file;
+
+import file.encryptor.FileEncryptor;
+import file.reader.FileReader;
+import file.reader.FileReaderFactory;
+import file.writer.FileWriter;
+import file.writer.FileWriterFactory;
+import file.zipper.FileZipper;
+
+import java.io.IOException;
+import java.util.List;
+
+public class FileProcessor {
+    private FileZipper fileZipper;
+    private FileEncryptor fileEncryptor;
+    private FileReader fileReader;
+    private FileWriter fileWriter;
+
+    public FileProcessor(String inputFile, String outputFile) throws IOException {
+        fileZipper = new FileZipper();
+        fileEncryptor = new FileEncryptor();
+        fileReader = FileReaderFactory.createFileReader(inputFile);
+        fileWriter = FileWriterFactory.createFileWriter(outputFile);
+    }
+
+    public void process(String inputFile, String outputFile, String key) throws IOException {
+        List<String> text = fileReader.readText(inputFile);
+
+        List<String> decryptedText = fileEncryptor.decrypt(text, key);
+
+
+        fileWriter.writeText(outputFile, decryptedText);
+
+        fileZipper.zipDirectory(outputFile);
+    }
+}
