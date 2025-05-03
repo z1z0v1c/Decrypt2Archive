@@ -1,4 +1,4 @@
-package fileprocessor.impl;
+package file.processor.impl;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -9,7 +9,7 @@ import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import fileprocessor.FileProcessor;
+import file.processor.FileProcessor;
 
 /**
  * @author Aleksndar Zizovic

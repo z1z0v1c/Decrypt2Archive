@@ -1,7 +1,7 @@
-package fileprocessor;
+package file.processor;
 
-import fileprocessor.impl.TXTFileProcessor;
-import fileprocessor.impl.XLSXFileProcessor;
+import file.processor.impl.TXTFileProcessor;
+import file.processor.impl.XLSXFileProcessor;
 
 import java.io.IOException;
 

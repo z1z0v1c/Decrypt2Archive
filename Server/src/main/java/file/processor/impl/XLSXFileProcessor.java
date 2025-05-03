@@ -1,4 +1,4 @@
-package fileprocessor.impl;
+package file.processor.impl;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -16,7 +16,7 @@ import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import fileprocessor.FileProcessor;
+import file.processor.FileProcessor;
 
 /**
  * @author Aleksndar Zizovic

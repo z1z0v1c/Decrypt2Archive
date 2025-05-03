@@ -1,4 +1,4 @@
-package util;
+package file.zipper;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -10,7 +10,7 @@ import java.util.zip.ZipOutputStream;
 /**
  * @author Aleksndar Zizovic
  */
-public class Zipper {
+public class FileZipper {
     public void zipDirectory(String path) throws IOException {
         File fileToZip = new File(path).getParentFile();
 

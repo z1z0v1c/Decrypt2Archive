@@ -2,7 +2,7 @@
  * This program is free software; you can redistribute it and/or
  * modify it.
  */
-package encryption;
+package file.encryptor;
 
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidAlgorithmParameterException;
@@ -24,7 +24,7 @@ import javax.crypto.spec.SecretKeySpec;
  *
  * @author Stefan Pantelic
  */
-public class Encryptor {
+public class FileEncryptor {
 
     public static final String INIT_VECTOR = "***Don'tPanic***"; //DO NOT REPLACE THIS VALUE!
 

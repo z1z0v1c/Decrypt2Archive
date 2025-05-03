@@ -1,12 +1,12 @@
 package server;
 
 import database.DatabaseConnection;
-import encryption.Encryptor;
-import fileprocessor.FileProcessor;
-import fileprocessor.FileProcessorFactory;
+import file.encryptor.FileEncryptor;
+import file.processor.FileProcessor;
+import file.processor.FileProcessorFactory;
 import network.SocketConnection;
 import picocli.CommandLine.Option;
-import util.Zipper;
+import file.zipper.FileZipper;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -28,8 +28,8 @@ public class Server implements Runnable {
 
     private SocketConnection socketConnection;
     private DatabaseConnection databaseConnection;
-    private Zipper zipper;
-    private Encryptor encryptor;
+    private FileZipper fileZipper;
+    private FileEncryptor encryptor;
     private FileProcessor fileProcessor;
 
     @Override
@@ -46,8 +46,8 @@ public class Server implements Runnable {
             socketConnection.acceptClient();
             databaseConnection.log("Client accepted", new Date(System.currentTimeMillis()).toString());
 
-            zipper = new Zipper();
-            encryptor = new Encryptor();
+            fileZipper = new FileZipper();
+            encryptor = new FileEncryptor();
 
             String inputDirectory = socketConnection.getInputDirectory();
             String key = databaseConnection.selectKey(inputDirectory);
@@ -62,7 +62,7 @@ public class Server implements Runnable {
 
             fileProcessor.writeText(pathToOutputDir, decryptedText);
 
-            zipper.zipDirectory(pathToOutputDir);
+            fileZipper.zipDirectory(pathToOutputDir);
 
             socketConnection.sendResponse("Success");
             databaseConnection.log("Success", new Date(System.currentTimeMillis()).toString());

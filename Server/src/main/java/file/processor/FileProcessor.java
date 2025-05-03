@@ -1,4 +1,4 @@
-package fileprocessor;
+package file.processor;
 
 import java.io.FileNotFoundException;
 import java.util.List;
