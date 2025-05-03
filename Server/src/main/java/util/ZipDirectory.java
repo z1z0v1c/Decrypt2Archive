@@ -8,7 +8,6 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 /**
- *
  * @author Aleksndar Zizovic
  */
 public class ZipDirectory {

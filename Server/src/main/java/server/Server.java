@@ -33,17 +33,19 @@ public class Server implements Runnable {
     @Override
     public void run() {
         try {
-            databaseConnection = new DatabaseConnection(pathToDatabase);
-            socketConnection = new SocketConnection(portNumber);
-            databaseConnection.logToDatabase("Server started", new Date(System.currentTimeMillis()).toString());
+            createDatabaseConnection();
+            createSocketConnection();
 
-            socketConnection.acceptClient();
-            databaseConnection.logToDatabase("Client accepted", new Date(System.currentTimeMillis()).toString());
+            acceptClient();
 
             String inputDirectory = socketConnection.getInputDirectory();
             String key = databaseConnection.selectKey(inputDirectory);
 
-            decryptFile(inputDirectory, pathToOutputDir, key);
+            List<String> text = readFile(inputDirectory);
+
+            List<String> decryptedText = decrypt(text, key);
+
+            writeText(decryptedText, pathToOutputDir);
 
             ZipDirectory.zipDirectory(pathToOutputDir);
 
@@ -69,7 +71,33 @@ public class Server implements Runnable {
         }
     }
 
-    public void decryptFile(String pathToInputDir, String pathToOutputDir, String keyTXT) throws IOException {
+    public void createDatabaseConnection() {
+        databaseConnection = new DatabaseConnection(pathToDatabase);
+    }
+
+    public void createSocketConnection() {
+        databaseConnection.logToDatabase("Starting the server...", new Date(System.currentTimeMillis()).toString());
+
+        try {
+            socketConnection = new SocketConnection(portNumber);
+        } catch (IOException e) {
+            databaseConnection.logToDatabase("IOException", new Date(System.currentTimeMillis()).toString());
+        }
+
+        databaseConnection.logToDatabase("Server started", new Date(System.currentTimeMillis()).toString());
+    }
+
+    public void acceptClient() {
+        try {
+            socketConnection.acceptClient();
+        } catch (IOException e) {
+            databaseConnection.logToDatabase("IOException", new Date(System.currentTimeMillis()).toString());
+        }
+
+        databaseConnection.logToDatabase("Client accepted", new Date(System.currentTimeMillis()).toString());
+    }
+
+    public List<String> readFile(String pathToInputDir) throws IOException {
         File file = new File(pathToOutputDir);
 
         if (!file.exists()) {
@@ -80,31 +108,38 @@ public class Server implements Runnable {
             }
         }
 
-        FileProcessor txtProcessor = FileProcessorFactory.getFileProcessor(pathToInputDir);
+        FileProcessor fileProcessor = FileProcessorFactory.getFileProcessor(pathToInputDir);
 
         System.out.println("Reading file: " + pathToInputDir);
         databaseConnection.logToDatabase("Reading file: " + pathToInputDir, new Date(System.currentTimeMillis()).toString());
 
-        List<String> listTXT = txtProcessor.getTextFromFile(pathToInputDir);
+        List<String> text = fileProcessor.getTextFromFile(pathToInputDir);
 
-        System.out.println("File is read: " + pathToOutputDir);
-        databaseConnection.logToDatabase("File is read: " + pathToOutputDir, new Date(System.currentTimeMillis()).toString());
+        System.out.println("File is read: " + pathToInputDir);
+        databaseConnection.logToDatabase("File is read: " + pathToInputDir, new Date(System.currentTimeMillis()).toString());
 
-        List<String> listTXTDecrypted = new ArrayList<>();
+        return text;
+    }
 
-        System.out.println("Decrypting file: " + pathToOutputDir);
-        databaseConnection.logToDatabase("Decrypting file: " + pathToOutputDir, new Date(System.currentTimeMillis()).toString());
+    public List<String> decrypt(List<String> text, String key) {
+        List<String> decryptedText = new ArrayList<>();
 
-        for (String value : listTXT) {
-            String decryptedTXT = Encryptor.decrypt(keyTXT, value);
-            listTXTDecrypted.add(decryptedTXT);
+        for (String word : text) {
+            String decryptedTXT = Encryptor.decrypt(key, word);
+            decryptedText.add(decryptedTXT);
         }
 
-        System.out.println("File is decrypted: " + pathToInputDir);
-        databaseConnection.logToDatabase("File is decrypted: " + pathToInputDir, new Date(System.currentTimeMillis()).toString());
+        return decryptedText;
+    }
 
-        txtProcessor.printToFile(pathToOutputDir, listTXTDecrypted);
+    public void writeText(List<String> text, String outputDirectory) {
+        try {
+            FileProcessor fileProcessor = FileProcessorFactory.getFileProcessor(outputDirectory);
 
+            fileProcessor.printToFile(pathToOutputDir, text);
+        } catch (IOException e) {
+            databaseConnection.logToDatabase("IOException", new Date(System.currentTimeMillis()).toString());
+        }
         System.out.println("Decrypted file path: " + pathToOutputDir);
         databaseConnection.logToDatabase("Decrypted file path: " + pathToOutputDir, new Date(System.currentTimeMillis()).toString());
     }
