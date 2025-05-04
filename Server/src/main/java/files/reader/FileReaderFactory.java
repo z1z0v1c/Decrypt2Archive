@@ -1,7 +1,7 @@
-package file.reader;
+package files.reader;
 
-import file.reader.impl.TxtFileReader;
-import file.reader.impl.XlsxFileReader;
+import files.reader.impl.TxtFileReader;
+import files.reader.impl.XlsxFileReader;
 
 import java.io.IOException;
 

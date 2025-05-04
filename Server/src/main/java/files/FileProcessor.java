@@ -1,11 +1,11 @@
-package file;
+package files;
 
-import file.encryptor.FileEncryptor;
-import file.reader.FileReader;
-import file.reader.FileReaderFactory;
-import file.writer.FileWriter;
-import file.writer.FileWriterFactory;
-import file.zipper.FileZipper;
+import files.encryptor.FileEncryptor;
+import files.reader.FileReader;
+import files.reader.FileReaderFactory;
+import files.writer.FileWriter;
+import files.writer.FileWriterFactory;
+import files.zipper.FileZipper;
 
 import java.io.IOException;
 import java.util.List;
@@ -27,7 +27,6 @@ public class FileProcessor {
         List<String> text = fileReader.readText(inputFile);
 
         List<String> decryptedText = fileEncryptor.decrypt(text, key);
-
 
         fileWriter.writeText(outputFile, decryptedText);
 

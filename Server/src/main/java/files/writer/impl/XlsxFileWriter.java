@@ -1,6 +1,6 @@
-package file.writer.impl;
+package files.writer.impl;
 
-import file.writer.FileWriter;
+import files.writer.FileWriter;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;

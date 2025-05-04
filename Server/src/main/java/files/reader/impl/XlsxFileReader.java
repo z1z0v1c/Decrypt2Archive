@@ -1,6 +1,6 @@
-package file.reader.impl;
+package files.reader.impl;
 
-import file.reader.FileReader;
+import files.reader.FileReader;
 import org.apache.poi.EncryptedDocumentException;
 import org.apache.poi.ss.usermodel.*;
 

@@ -1,4 +1,4 @@
-package file.reader;
+package files.reader;
 
 import java.io.FileNotFoundException;
 import java.util.List;

@@ -1,7 +1,7 @@
-package file.writer;
+package files.writer;
 
-import file.writer.impl.TxtFileWriter;
-import file.writer.impl.XlsxFileWriter;
+import files.writer.impl.TxtFileWriter;
+import files.writer.impl.XlsxFileWriter;
 
 import java.io.IOException;
 

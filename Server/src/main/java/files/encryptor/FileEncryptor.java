@@ -2,7 +2,7 @@
  * This program is free software; you can redistribute it and/or
  * modify it.
  */
-package file.encryptor;
+package files.encryptor;
 
 import java.nio.charset.StandardCharsets;
 import java.security.InvalidAlgorithmParameterException;

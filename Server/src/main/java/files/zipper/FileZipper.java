@@ -1,4 +1,4 @@
-package file.zipper;
+package files.zipper;
 
 import java.io.File;
 import java.io.FileInputStream;

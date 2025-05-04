@@ -1,6 +1,6 @@
-package file.writer.impl;
+package files.writer.impl;
 
-import file.writer.FileWriter;
+import files.writer.FileWriter;
 
 import java.io.File;
 import java.io.FileNotFoundException;

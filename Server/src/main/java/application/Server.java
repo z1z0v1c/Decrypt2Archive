@@ -1,7 +1,8 @@
 package application;
 
-import database.DatabaseConnection;
-import file.FileProcessor;
+import databases.Database;
+import databases.impl.SqliteDatabase;
+import files.FileProcessor;
 import network.SocketConnection;
 import picocli.CommandLine.Option;
 
@@ -20,50 +21,54 @@ public class Server implements Runnable {
     private static String pathToDatabase;
 
     @Option(names = {"-o", "--output-directory"}, required = true, description = "Path to the output directory")
-    private static String pathToOutputDir;
+    private static String outputDirectory;
+
+    private Database database;
 
     private SocketConnection socketConnection;
-    private DatabaseConnection databaseConnection;
+
     private FileProcessor fileProcessor;
 
     @Override
     public void run() {
         try {
-            databaseConnection = new DatabaseConnection(pathToDatabase);
+            database = new SqliteDatabase(pathToDatabase);
 
-            databaseConnection.log("Starting the server...", new Date(System.currentTimeMillis()).toString());
+            database.log("Starting the server...", new Date(System.currentTimeMillis()).toString());
 
             socketConnection = new SocketConnection(portNumber);
 
-            databaseConnection.log("Server started", new Date(System.currentTimeMillis()).toString());
+            database.log("Server started", new Date(System.currentTimeMillis()).toString());
 
             socketConnection.acceptClient();
-            
-            databaseConnection.log("Client accepted", new Date(System.currentTimeMillis()).toString());
+
+            database.log("Client accepted", new Date(System.currentTimeMillis()).toString());
 
             String inputDirectory = socketConnection.getInputDirectory();
-            String key = databaseConnection.selectKey(inputDirectory);
+            String key = database.selectKey(inputDirectory);
 
-            fileProcessor = new FileProcessor(inputDirectory, pathToOutputDir);
+            fileProcessor = new FileProcessor(inputDirectory, outputDirectory);
 
-            fileProcessor.process(inputDirectory, pathToOutputDir, key);
+            fileProcessor.process(inputDirectory, outputDirectory, key);
 
             socketConnection.sendResponse("Success");
-            
-            databaseConnection.log("Success", new Date(System.currentTimeMillis()).toString());
+
+            database.log("Success", new Date(System.currentTimeMillis()).toString());
 
             socketConnection.close();
 
-            databaseConnection.log("Closing connection", new Date(System.currentTimeMillis()).toString());
-            
-            databaseConnection.close();
+            database.log("Closing connection", new Date(System.currentTimeMillis()).toString());
+
+            database.close();
         } catch (IOException ex) {
             try {
                 socketConnection.sendResponse(ex.getMessage());
+                database.log("IOException", new Date(System.currentTimeMillis()).toString());
             } catch (IOException e) {
                 throw new RuntimeException(e);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
             }
-            databaseConnection.log("IOException", new Date(System.currentTimeMillis()).toString());
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
