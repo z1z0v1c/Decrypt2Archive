@@ -38,6 +38,7 @@ public class Server implements Runnable {
             databaseConnection.log("Server started", new Date(System.currentTimeMillis()).toString());
 
             socketConnection.acceptClient();
+            
             databaseConnection.log("Client accepted", new Date(System.currentTimeMillis()).toString());
 
             String inputDirectory = socketConnection.getInputDirectory();
@@ -48,11 +49,13 @@ public class Server implements Runnable {
             fileProcessor.process(inputDirectory, pathToOutputDir, key);
 
             socketConnection.sendResponse("Success");
+            
             databaseConnection.log("Success", new Date(System.currentTimeMillis()).toString());
 
             socketConnection.close();
 
             databaseConnection.log("Closing connection", new Date(System.currentTimeMillis()).toString());
+            
             databaseConnection.close();
         } catch (IOException ex) {
             try {
