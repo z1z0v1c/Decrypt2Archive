@@ -1,7 +1,6 @@
 package databases.impl;
 
 import databases.Database;
-import jdk.internal.joptsimple.internal.Strings;
 
 import java.io.IOException;
 import java.sql.Connection;
@@ -24,7 +23,7 @@ public final class SqliteDatabase implements Database {
     /// Select all rows in the warehouses table
     @Override
     public String selectKey(String file) throws SQLException {
-        String key = Strings.EMPTY;
+        String key = "";
 
         Statement stmt = connection.createStatement();
 

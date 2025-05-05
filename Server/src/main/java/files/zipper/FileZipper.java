@@ -10,10 +10,10 @@ import java.util.zip.ZipOutputStream;
 /// @author Aleksndar Zizovic
 public class FileZipper {
     public void zipDirectory(String path) throws IOException {
-        File original = new File(path).getParentFile();
+        var original = new File(path).getParentFile();
 
-        try (FileOutputStream fileOutput = new FileOutputStream(original.getParentFile().getPath() + "\\Output.zip");
-             ZipOutputStream zipped = new ZipOutputStream(fileOutput)) {
+        try (var fileOutput = new FileOutputStream(original.getParentFile().getPath() + "\\Output.zip");
+             var zipped = new ZipOutputStream(fileOutput)) {
             zipFile(original, original.getName(), zipped);
         }
     }
@@ -43,13 +43,13 @@ public class FileZipper {
             return;
         }
 
-        try (FileInputStream inputStream = new FileInputStream(original)) {
-            ZipEntry zipEntry = new ZipEntry(fileName);
+        try (var inputStream = new FileInputStream(original)) {
+             var zipEntry = new ZipEntry(fileName);
 
             zipped.putNextEntry(zipEntry);
 
-            byte[] bytes = new byte[1024];
             int length;
+            byte[] bytes = new byte[1024];
 
             while ((length = inputStream.read(bytes)) >= 0) {
                 zipped.write(bytes, 0, length);
