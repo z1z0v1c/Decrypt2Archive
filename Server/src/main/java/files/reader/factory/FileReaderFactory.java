@@ -8,12 +8,12 @@ import java.io.IOException;
 
 public class FileReaderFactory {
     public static FileReader createFileReader(String file) throws IOException {
-        if (file.endsWith("txt")) {
+        if (file.endsWith(".txt")) {
             return new TxtFileReader();
-        } else if (file.endsWith("xlsx")) {
+        } else if (file.endsWith(".xlsx")) {
             return new XlsxFileReader();
         } else {
-            throw new IOException("Wrong extension");
+            throw new IOException("Incompatible file extension.");
         }
     }
 }

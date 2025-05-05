@@ -1,9 +1,6 @@
 package files.writer.impl;
 
 import files.writer.FileWriter;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.File;
@@ -17,22 +14,18 @@ import java.util.logging.Logger;
 public class XlsxFileWriter implements FileWriter {
     public void writeText(String path, List<String> text) {
         int columns = 3;
-        FileOutputStream fileOut;
-        File output = new File(path);
+        var file = new File(path);
 
-        try {
-            fileOut = new FileOutputStream(output);
-            Workbook workbook = new XSSFWorkbook();
-
+        try (var output = new FileOutputStream(file); var workbook = new XSSFWorkbook()) {
             workbook.getCreationHelper();
 
-            Sheet sheet = workbook.createSheet("Sheet 1");
+            var sheet = workbook.createSheet("Sheet 1");
 
             int index = 0;
             int rowNumber = 0;
 
             while (index < text.size()) {
-                Row row = sheet.createRow(rowNumber);
+                var row = sheet.createRow(rowNumber);
 
                 for (int j = 0; j < columns; j++) {
                     row.createCell(j).setCellValue(text.get(index));
@@ -44,11 +37,7 @@ public class XlsxFileWriter implements FileWriter {
                 }
             }
 
-            workbook.write(fileOut);
-            fileOut.close();
-
-            // Closing the workbook
-            workbook.close();
+            workbook.write(output);
         } catch (FileNotFoundException ex) {
             Logger.getLogger(XlsxFileWriter.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {

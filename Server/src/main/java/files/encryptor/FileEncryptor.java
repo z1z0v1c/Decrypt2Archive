@@ -33,7 +33,7 @@ public class FileEncryptor {
     /// @param encrypted List of values to be decrypted
     /// @return list of decrypted original values
     public List<String> decrypt(String key, List<String> encrypted) {
-        List<String> originals = new ArrayList<>();
+        var originals = new ArrayList<String>();
 
         for (String value : encrypted) {
             String original = decrypt(key, value);
@@ -50,10 +50,10 @@ public class FileEncryptor {
     /// @return encrypted content
     private String encrypt(String key, String value) {
         try {
-            IvParameterSpec iv = new IvParameterSpec(INIT_VECTOR.getBytes(StandardCharsets.UTF_8));
-            SecretKeySpec skeySpec = new SecretKeySpec(key.getBytes(StandardCharsets.UTF_8), "AES");
+            var iv = new IvParameterSpec(INIT_VECTOR.getBytes(StandardCharsets.UTF_8));
+            var skeySpec = new SecretKeySpec(key.getBytes(StandardCharsets.UTF_8), "AES");
 
-            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
+            var cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
             cipher.init(Cipher.ENCRYPT_MODE, skeySpec, iv);
 
             byte[] encrypted = cipher.doFinal(value.getBytes());
@@ -74,10 +74,10 @@ public class FileEncryptor {
     /// @return decrypted content
     private String decrypt(String key, String encrypted) {
         try {
-            IvParameterSpec iv = new IvParameterSpec(INIT_VECTOR.getBytes(StandardCharsets.UTF_8));
-            SecretKeySpec skeySpec = new SecretKeySpec(key.getBytes(StandardCharsets.UTF_8), "AES");
+            var iv = new IvParameterSpec(INIT_VECTOR.getBytes(StandardCharsets.UTF_8));
+            var skeySpec = new SecretKeySpec(key.getBytes(StandardCharsets.UTF_8), "AES");
 
-            Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
+            var cipher = Cipher.getInstance("AES/CBC/PKCS5PADDING");
             cipher.init(Cipher.DECRYPT_MODE, skeySpec, iv);
 
             byte[] original = cipher.doFinal(Base64.getDecoder().decode(encrypted.trim()));

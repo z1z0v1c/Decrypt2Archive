@@ -13,12 +13,12 @@ import java.util.logging.Logger;
 
 public class XlsxFileReader implements FileReader {
     public List<String> readText(String path) {
-        File source = new File(path);
-        List<String> text = new ArrayList<>();
+        var source = new File(path);
+        var text = new ArrayList<String>();
 
         try {
-            Workbook workbook = WorkbookFactory.create(source);
-            DataFormatter dataFormatter = new DataFormatter();
+            var workbook = WorkbookFactory.create(source);
+            var dataFormatter = new DataFormatter();
 
             for (Sheet sheet : workbook) {
                 for (Row row : sheet) {

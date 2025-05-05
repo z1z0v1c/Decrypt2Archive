@@ -12,15 +12,15 @@ import java.util.logging.Logger;
 
 public class TxtFileReader implements FileReader {
     public List<String> readText(String path) throws FileNotFoundException {
-        Scanner in;
-        File source = new File(path);
-        List<String> text = new ArrayList<>();
+        Scanner scanner;
+        var file = new File(path);
+        var text = new ArrayList<String>();
 
         try {
-            in = new Scanner(source);
+            scanner = new Scanner(file);
 
-            while (in.hasNext()) {
-                text.add(in.next());
+            while (scanner.hasNext()) {
+                text.add(scanner.next());
             }
         } catch (FileNotFoundException ex) {
             Logger.getLogger(TxtFileReader.class.getName()).log(Level.SEVERE, null, ex);

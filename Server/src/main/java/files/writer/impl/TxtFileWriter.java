@@ -11,16 +11,14 @@ import java.util.logging.Logger;
 
 public class TxtFileWriter implements FileWriter {
     public void writeText(String path, List<String> text) {
-        File output = new File(path);
+        var output = new File(path);
 
         try {
-            PrintWriter out = new PrintWriter(output);
-
-            for (String string : text) {
-                out.print(string);
+            try (var out = new PrintWriter(output)) {
+                for (String string : text) {
+                    out.print(string);
+                }
             }
-
-            out.close();
         } catch (FileNotFoundException ex) {
             Logger.getLogger(TxtFileWriter.class.getName()).log(Level.SEVERE, null, ex);
         }
