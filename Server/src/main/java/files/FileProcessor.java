@@ -2,9 +2,9 @@ package files;
 
 import files.encryptor.FileEncryptor;
 import files.reader.FileReader;
-import files.reader.FileReaderFactory;
+import files.reader.factory.FileReaderFactory;
 import files.writer.FileWriter;
-import files.writer.FileWriterFactory;
+import files.writer.factory.FileWriterFactory;
 import files.zipper.FileZipper;
 
 import java.io.IOException;
@@ -26,7 +26,7 @@ public class FileProcessor {
     public void process(String inputFile, String outputFile, String key) throws IOException {
         List<String> text = fileReader.readText(inputFile);
 
-        List<String> decryptedText = fileEncryptor.decrypt(text, key);
+        List<String> decryptedText = fileEncryptor.decrypt(key, text);
 
         fileWriter.writeText(outputFile, decryptedText);
 

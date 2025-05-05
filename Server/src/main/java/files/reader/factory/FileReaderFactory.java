@@ -1,5 +1,6 @@
-package files.reader;
+package files.reader.factory;
 
+import files.reader.FileReader;
 import files.reader.impl.TxtFileReader;
 import files.reader.impl.XlsxFileReader;
 

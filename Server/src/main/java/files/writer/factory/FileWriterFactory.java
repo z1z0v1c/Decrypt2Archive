@@ -1,5 +1,6 @@
-package files.writer;
+package files.writer.factory;
 
+import files.writer.FileWriter;
 import files.writer.impl.TxtFileWriter;
 import files.writer.impl.XlsxFileWriter;
 
