@@ -8,9 +8,7 @@ import java.util.logging.Logger;
 import network.SocketConnection;
 import picocli.CommandLine.Option;
 
-/**
- * @author Aleksandar Zizovic
- */
+/// @author Aleksandar Zizovic
 public class Client implements Runnable {
     private static final Logger logger = Logger.getLogger(Client.class.getName());
 

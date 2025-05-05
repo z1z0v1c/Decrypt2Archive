@@ -3,9 +3,7 @@ package network;
 import java.net.*;
 import java.io.*;
 
-/**
- * @author Aleksandar Zizovic
- */
+/// @author Aleksandar Zizovic
 public class SocketConnection implements Closeable {
     private final Socket socket;
     private final DataInputStream input;

@@ -44,7 +44,7 @@ public class Server implements Runnable {
 
             database.log("Client accepted", new Date(System.currentTimeMillis()).toString());
 
-            String inputDirectory = socketConnection.getInputDirectory();
+            String inputDirectory = socketConnection.getData();
             String key = database.selectKey(inputDirectory);
 
             fileProcessor = new FileProcessor(inputDirectory, outputDirectory);

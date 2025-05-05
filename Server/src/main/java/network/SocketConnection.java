@@ -11,9 +11,6 @@ public class SocketConnection implements Closeable {
 
     public SocketConnection(int port) throws IOException {
         serverSocket = new ServerSocket(port);
-
-        System.out.println("Server started");
-        System.out.println("Waiting for a client ...");
     }
 
     public void acceptClient() throws IOException {
@@ -22,16 +19,12 @@ public class SocketConnection implements Closeable {
 
         input = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
         output = new DataOutputStream(socket.getOutputStream());
-
-        System.out.println("Client accepted");
     }
 
-    public String getInputDirectory() throws IOException {
-        String pathToInputDir = input.readUTF();
+    public String getData() throws IOException {
+        String data = input.readUTF();
 
-        System.out.println(pathToInputDir);
-
-        return pathToInputDir;
+        return data;
     }
 
     public void sendResponse(String message) throws IOException {
@@ -40,16 +33,9 @@ public class SocketConnection implements Closeable {
 
     @Override
     public void close() throws IOException {
-        System.out.println("Closing connection");
-
-        // Close the connection
-        try {
-            socket.close();
-            serverSocket.close();
-            input.close();
-            output.close();
-        } catch (IOException i) {
-            System.out.println(i);
-        }
+        socket.close();
+        serverSocket.close();
+        input.close();
+        output.close();
     }
 }
