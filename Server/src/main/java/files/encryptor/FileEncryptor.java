@@ -19,22 +19,35 @@ import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
 
-/**
- * Class used for encrypting and decrypting files in the task
- *
- * @author Stefan Pantelic
- */
+/// Class used for encrypting and decrypting files in the task
+///
+/// @author Stefan Pantelic
+/// @author Aleksandar Zizovic
 public class FileEncryptor {
 
     public static final String INIT_VECTOR = "***Don'tPanic***"; //DO NOT REPLACE THIS VALUE!
 
-    /**
-     * Encrypts given content with given key
-     *
-     * @param key   128bit long key used for encryption
-     * @param value Value to be encrypted
-     * @return encrypted content
-     */
+    /// Decrypt given list of encrypted values with given key
+    ///
+    /// @param key       128bit long key used for decryption
+    /// @param encrypted List of values to be decrypted
+    /// @return list of decrypted original values
+    public List<String> decrypt(String key, List<String> encrypted) {
+        List<String> originals = new ArrayList<>();
+
+        for (String value : encrypted) {
+            String original = decrypt(key, value);
+            originals.add(original);
+        }
+
+        return originals;
+    }
+
+    /// Encrypts given content with given key
+    ///
+    /// @param key   128bit long key used for encryption
+    /// @param value Value to be encrypted
+    /// @return encrypted content
     private String encrypt(String key, String value) {
         try {
             IvParameterSpec iv = new IvParameterSpec(INIT_VECTOR.getBytes(StandardCharsets.UTF_8));
@@ -54,13 +67,11 @@ public class FileEncryptor {
         return null;
     }
 
-    /**
-     * Decrypt given content with given key
-     *
-     * @param key       128bit long key used for decryption
-     * @param encrypted Value to be decrypted
-     * @return decrypted content
-     */
+    /// Decrypt given content with given key
+    ///
+    /// @param key       128bit long key used for decryption
+    /// @param encrypted Value to be decrypted
+    /// @return decrypted content
     private String decrypt(String key, String encrypted) {
         try {
             IvParameterSpec iv = new IvParameterSpec(INIT_VECTOR.getBytes(StandardCharsets.UTF_8));
@@ -78,16 +89,5 @@ public class FileEncryptor {
         }
 
         return null;
-    }
-
-    public List<String> decrypt(List<String> text, String key) {
-        List<String> decryptedText = new ArrayList<>();
-
-        for (String word : text) {
-            String decryptedTXT = decrypt(key, word);
-            decryptedText.add(decryptedTXT);
-        }
-
-        return decryptedText;
     }
 }
