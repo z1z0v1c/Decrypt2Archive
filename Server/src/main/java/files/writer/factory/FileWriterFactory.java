@@ -6,6 +6,7 @@ import files.writer.impl.XlsxFileWriter;
 
 import java.io.IOException;
 
+/// @author Aleksandar Zizovic
 public class FileWriterFactory {
     public static FileWriter createFileWriter(String file) throws IOException {
         if (file.endsWith(".txt")) {

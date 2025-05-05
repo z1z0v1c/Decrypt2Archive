@@ -4,6 +4,7 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.sql.SQLException;
 
+/// @author Aleksandar Zizovic
 public interface Database extends Closeable {
     String selectKey(String file) throws SQLException;
 

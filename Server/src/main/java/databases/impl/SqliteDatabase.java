@@ -17,7 +17,7 @@ public final class SqliteDatabase implements Database {
     public SqliteDatabase(String path) throws SQLException {
         connection = DriverManager.getConnection("jdbc:sqlite:" + path);
 
-        createNewTable("actions");
+        createTable("actions");
     }
 
     /// Select all rows in the warehouses table
@@ -51,7 +51,7 @@ public final class SqliteDatabase implements Database {
         insert.executeUpdate();
     }
 
-    private void createNewTable(String table) throws SQLException {
+    private void createTable(String table) throws SQLException {
         Statement stmt = connection.createStatement();
 
         String sql = "CREATE TABLE IF NOT EXISTS " + table + " (\n"

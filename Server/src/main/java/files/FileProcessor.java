@@ -10,6 +10,7 @@ import files.zipper.FileZipper;
 import java.io.IOException;
 import java.util.List;
 
+/// @author Aleksandar Zizovic
 public class FileProcessor {
     private FileZipper fileZipper;
     private FileEncryptor fileEncryptor;

@@ -6,6 +6,7 @@ import files.reader.impl.XlsxFileReader;
 
 import java.io.IOException;
 
+/// @author Aleksandar Zizovic
 public class FileReaderFactory {
     public static FileReader createFileReader(String file) throws IOException {
         if (file.endsWith(".txt")) {

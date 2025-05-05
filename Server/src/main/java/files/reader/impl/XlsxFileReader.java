@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/// @author Aleksandar Zizovic
 public class XlsxFileReader implements FileReader {
     public List<String> readText(String path) throws IOException {
         var text = new ArrayList<String>();

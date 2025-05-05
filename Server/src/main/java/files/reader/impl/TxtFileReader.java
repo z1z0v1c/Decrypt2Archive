@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+/// @author Aleksandar Zizovic
 public class TxtFileReader implements FileReader {
     public List<String> readText(String path) throws FileNotFoundException {
         var text = new ArrayList<String>();

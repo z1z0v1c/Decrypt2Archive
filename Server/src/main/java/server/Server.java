@@ -11,6 +11,7 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Date;
 
+/// @author Aleksandar Zizovic
 public class Server implements Closeable {
     private Database database;
     private SocketConnection socketConnection;

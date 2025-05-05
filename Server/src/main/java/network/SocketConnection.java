@@ -3,6 +3,7 @@ package network;
 import java.net.*;
 import java.io.*;
 
+/// @author Aleksandar Zizovic
 public class SocketConnection implements Closeable {
     private Socket socket;
     private ServerSocket serverSocket;
@@ -22,9 +23,7 @@ public class SocketConnection implements Closeable {
     }
 
     public String getData() throws IOException {
-        String data = input.readUTF();
-
-        return data;
+        return input.readUTF();
     }
 
     public void sendResponse(String message) throws IOException {
