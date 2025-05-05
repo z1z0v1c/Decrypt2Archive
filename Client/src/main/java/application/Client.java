@@ -1,16 +1,17 @@
 package application;
 
+import network.SocketConnection;
+import org.apache.logging.log4j.Level;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import picocli.CommandLine.Option;
+
 import java.io.IOException;
 import java.net.UnknownHostException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import network.SocketConnection;
-import picocli.CommandLine.Option;
 
 /// @author Aleksandar Zizovic
 public class Client implements Runnable {
-    private static final Logger logger = Logger.getLogger(Client.class.getName());
+    private static final Logger logger = LogManager.getLogger(Client.class);
 
     @Option(names = {"-s", "--server-address"}, defaultValue = "localhost", description = "Server address")
     private String serverAddress;
@@ -46,10 +47,10 @@ public class Client implements Runnable {
 
             logger.log(Level.INFO, "Disconnected successfully.");
         } catch (IllegalArgumentException | UnknownHostException ex) {
-            logger.log(Level.SEVERE, String.format("Invalid argument: %s", ex.getMessage()));
+            logger.log(Level.ERROR, String.format("Invalid argument: %s", ex.getMessage()));
             System.exit(1);
         } catch (IOException ex) {
-            logger.log(Level.SEVERE, ex.getMessage());
+            logger.log(Level.ERROR, ex.getMessage());
             System.exit(1);
         }
     }
