@@ -7,55 +7,53 @@ import java.io.IOException;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-/**
- * @author Aleksndar Zizovic
- */
+/// @author Aleksndar Zizovic
 public class FileZipper {
     public void zipDirectory(String path) throws IOException {
-        File fileToZip = new File(path).getParentFile();
+        File original = new File(path).getParentFile();
 
-        try (FileOutputStream fos = new FileOutputStream(fileToZip.getParentFile().getPath() + "\\Output.zip"); 
-                ZipOutputStream zipOut = new ZipOutputStream(fos)) {                      
-            zipFile(fileToZip, fileToZip.getName(), zipOut);
+        try (FileOutputStream fileOutput = new FileOutputStream(original.getParentFile().getPath() + "\\Output.zip");
+             ZipOutputStream zipped = new ZipOutputStream(fileOutput)) {
+            zipFile(original, original.getName(), zipped);
         }
     }
- 
-    private void zipFile(File fileToZip, String fileName, ZipOutputStream zipOut) throws IOException {
-        if (fileToZip.isHidden()) {
+
+    private void zipFile(File original, String fileName, ZipOutputStream zipped) throws IOException {
+        if (original.isHidden()) {
             return;
         }
 
-        if (fileToZip.isDirectory()) {
+        if (original.isDirectory()) {
             if (fileName.endsWith("\\")) {
-                zipOut.putNextEntry(new ZipEntry(fileName));
-                zipOut.closeEntry();
+                zipped.putNextEntry(new ZipEntry(fileName));
+                zipped.closeEntry();
             } else {
-                zipOut.putNextEntry(new ZipEntry(fileName + "\\"));
-                zipOut.closeEntry();
+                zipped.putNextEntry(new ZipEntry(fileName + "\\"));
+                zipped.closeEntry();
             }
 
-            File[] children = fileToZip.listFiles();
-            assert children != null;
+            File[] children = original.listFiles();
+
+            if (children == null) throw new IOException("Directory is empty.");
 
             for (File childFile : children) {
-                zipFile(childFile, fileName + "\\" + childFile.getName(), zipOut);
+                zipFile(childFile, fileName + "\\" + childFile.getName(), zipped);
             }
 
             return;
         }
 
-        FileInputStream inputStream = new FileInputStream(fileToZip);
-        ZipEntry zipEntry = new ZipEntry(fileName);
+        try (FileInputStream inputStream = new FileInputStream(original)) {
+            ZipEntry zipEntry = new ZipEntry(fileName);
 
-        zipOut.putNextEntry(zipEntry);
+            zipped.putNextEntry(zipEntry);
 
-        byte[] bytes = new byte[1024];
-        int length;
+            byte[] bytes = new byte[1024];
+            int length;
 
-        while ((length = inputStream.read(bytes)) >= 0) {
-            zipOut.write(bytes, 0, length);
+            while ((length = inputStream.read(bytes)) >= 0) {
+                zipped.write(bytes, 0, length);
+            }
         }
-
-        inputStream.close();
     }
 }
