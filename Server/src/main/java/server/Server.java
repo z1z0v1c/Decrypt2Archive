@@ -17,21 +17,28 @@ public class Server implements Closeable {
     private SocketConnection socketConnection;
     private FileProcessor fileProcessor;
 
-    public Server(int portNumber, String databasePath) throws SQLException, IOException {
+    public void connectToDatabase(String databasePath) throws SQLException {
         database = new SqliteDatabase(databasePath);
-        socketConnection = new SocketConnection(portNumber);
     }
 
-    public void serve(String outputDirectory) throws IOException, SQLException {
+    public void serve(int port) throws IOException, SQLException {
         database.log("Starting the server...", new Date(System.currentTimeMillis()).toString());
+
+        socketConnection = new SocketConnection(port);
 
         socketConnection.acceptClient();
 
         database.log("Server started", new Date(System.currentTimeMillis()).toString());
         database.log("Client accepted", new Date(System.currentTimeMillis()).toString());
 
+        database.log("Closing connection", new Date(System.currentTimeMillis()).toString());
+    }
+
+    public void processRequest(String outputDirectory) throws IOException, SQLException {
         String inputFile = socketConnection.getData();
+
         String fileName = new File(inputFile).getName();
+
         String key = database.selectKey(fileName);
 
         fileProcessor = new FileProcessor(inputFile, outputDirectory);
@@ -41,8 +48,6 @@ public class Server implements Closeable {
         socketConnection.sendResponse("Success");
 
         database.log("Success", new Date(System.currentTimeMillis()).toString());
-
-        database.log("Closing connection", new Date(System.currentTimeMillis()).toString());
     }
 
     @Override

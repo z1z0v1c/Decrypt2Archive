@@ -20,7 +20,6 @@ public final class SqliteDatabase implements Database {
         createTable("actions");
     }
 
-    /// Select all rows in the warehouses table
     @Override
     public String selectKey(String file) throws SQLException {
         String key = "";

@@ -20,8 +20,12 @@ public class ConsoleApplication implements Runnable {
 
     @Override
     public void run() {
-        try {
-            new Server(portNumber, databasePath).serve(outputDirectory);
+        try (var server = new Server()) {
+            server.connectToDatabase(databasePath);
+
+            server.serve(portNumber);
+
+            server.processRequest(outputDirectory);
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         } catch (SQLException e) {
