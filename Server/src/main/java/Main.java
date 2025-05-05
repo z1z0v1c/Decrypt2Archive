@@ -1,5 +1,5 @@
 import picocli.CommandLine;
-import application.Server;
+import application.ConsoleApplication;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -10,7 +10,7 @@ public class Main {
     public static void main(String[] args) {
         logger.log(Level.INFO, "Starting the server...");
 
-        CommandLine.run(new Server(), args);
+        CommandLine.run(new ConsoleApplication(), args);
 
         logger.log(Level.INFO, "Shutting down the server...");
     }
