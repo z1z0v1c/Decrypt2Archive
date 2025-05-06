@@ -9,23 +9,23 @@ import java.sql.SQLException;
 /// @author Aleksandar Zizovic
 public class ConsoleApplication implements Runnable {
     @Option(names = {"-p", "--port-number"}, defaultValue = "8888", description = "Server port number")
-    private static int portNumber;
+    private static int port;
 
     @Option(names = {"-d", "--database"}, defaultValue = "database.sqlite3", description = "Database location")
-    private static String databasePath;
+    private static String database;
 
-    @Option(names = {"-o", "--output-directory"}, required = true, description = "Path to the output directory")
-    private static String outputDirectory;
+    @Option(names = {"-o", "--output-file"}, required = true, description = "Path to the output file")
+    private static String output;
 
 
     @Override
     public void run() {
         try (var server = new Server()) {
-            server.connectToDatabase(databasePath);
+            server.connectToDatabase(database);
 
-            server.serve(portNumber);
+            server.serve(port);
 
-            server.processRequest(outputDirectory);
+            server.processRequest(output);
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         } catch (SQLException e) {

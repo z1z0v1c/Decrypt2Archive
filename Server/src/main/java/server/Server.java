@@ -34,16 +34,16 @@ public class Server implements Closeable {
         database.log("Closing connection", new Date(System.currentTimeMillis()).toString());
     }
 
-    public void processRequest(String outputDirectory) throws IOException, SQLException {
+    public void processRequest(String outputFile) throws IOException, SQLException {
         String inputFile = socketConnection.getData();
 
         String fileName = new File(inputFile).getName();
 
         String key = database.selectKey(fileName);
 
-        fileProcessor = new FileProcessor(inputFile, outputDirectory);
+        fileProcessor = new FileProcessor(inputFile, outputFile);
 
-        fileProcessor.process(inputFile, outputDirectory, key);
+        fileProcessor.process(inputFile, outputFile, key);
 
         socketConnection.sendResponse("Success");
 
