@@ -1,6 +1,6 @@
 package application;
 
-import network.SocketConnection;
+import client.Client;
 import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -10,8 +10,8 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 
 /// @author Aleksandar Zizovic
-public class Client implements Runnable {
-    private static final Logger logger = LogManager.getLogger(Client.class);
+public class ConsoleApplication implements Runnable {
+    private static final Logger logger = LogManager.getLogger(ConsoleApplication.class);
 
     @Option(names = {"-s", "--server-address"}, defaultValue = "localhost", description = "Server address")
     private String serverAddress;
@@ -22,30 +22,23 @@ public class Client implements Runnable {
     @Option(names = {"-i", "--input-directory"}, required = true, description = "Path to the input directory on the server")
     private String inputDirectory;
 
-    private SocketConnection socketConnection;
 
     @Override
     public void run() {
-        try {
-            logger.log(Level.INFO, "Connecting to the server...");
+        try (var client = new Client()) {
+            logger.log(Level.INFO, String.format("Connecting to the %s server...", serverAddress));
 
-            // Connect to the server
-            socketConnection = new SocketConnection(serverAddress, portNumber);
+            client.connect(serverAddress, portNumber);
 
-            logger.log(Level.INFO, "Connection established.");
+            logger.log(Level.INFO, String.format("Connection established on port %d", portNumber));
+
             logger.log(Level.INFO, "Sending request to the server...");
 
-            // Send input directory
-            String response = socketConnection.sendData(inputDirectory);
+            String response = client.sendData(inputDirectory);
 
-            logger.log(Level.INFO, String.format("Response: %s", response));
+            logger.log(Level.INFO, response);
+
             logger.log(Level.INFO, "Disconnecting from the server...");
-
-            // Disconnect from the server and close resources
-            // Not using auto-closeable intentionally
-            socketConnection.close();
-
-            logger.log(Level.INFO, "Disconnected successfully.");
         } catch (IllegalArgumentException | UnknownHostException ex) {
             logger.log(Level.ERROR, String.format("Invalid argument: %s", ex.getMessage()));
             System.exit(1);

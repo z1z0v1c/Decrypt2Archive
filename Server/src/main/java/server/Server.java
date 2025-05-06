@@ -23,7 +23,7 @@ public class Server implements Closeable {
         database = new SqliteDatabase(databasePath);
         logger = new CompositeLogger(Server.class, database);
 
-        logger.log(Level.INFO, "Connected to the database.");
+        logger.log(Level.INFO, String.format("Connected to the %s database.", databasePath));
     }
 
     public void serve(int port) throws IOException, SQLException {
@@ -31,12 +31,15 @@ public class Server implements Closeable {
 
         socketConnection = new SocketConnection(port);
 
-        logger.log(Level.INFO, "Server started");
+        logger.log(Level.INFO, String.format("Server started on port %d", port));
+    }
+
+    public void acceptClient() throws IOException, SQLException {
+        logger.log(Level.INFO, "Waiting for a client...");
 
         socketConnection.acceptClient();
 
         logger.log(Level.INFO, "Client accepted");
-
     }
 
     public void processRequest(String outputFile) throws IOException, SQLException {
@@ -47,32 +50,25 @@ public class Server implements Closeable {
         logger.log(Level.INFO, String.format("Input file path: %s", inputFile));
 
         String fileName = new File(inputFile).getName();
-
         String key = database.selectKey(fileName);
 
-        logger.log(Level.INFO, String.format("Key for the given file: %s", inputFile));
+        logger.log(Level.INFO, String.format("Key for the given file: %s", key));
 
         fileProcessor = new FileProcessor(inputFile, outputFile);
 
-        logger.log(Level.INFO, "Decrypting the file...");
+        logger.log(Level.INFO, String.format("Decrypting the %s file...", fileName));
 
         fileProcessor.process(inputFile, outputFile, key);
 
-        logger.log(Level.INFO, "Success");
+        logger.log(Level.INFO, String.format("File decrypted successfully: %s", outputFile));
 
-        socketConnection.sendResponse("Success");
+        socketConnection.sendResponse(String.format("File decrypted successfully: %s", outputFile));
 
         logger.log(Level.INFO, "Shutting down the server...");
     }
 
     @Override
     public void close() throws IOException {
-        try {
-            logger.log(Level.INFO, "Closing database connection...");
-        } catch (SQLException e) {
-            throw new IOException(e);
-        }
-
         socketConnection.close();
         database.close();
     }

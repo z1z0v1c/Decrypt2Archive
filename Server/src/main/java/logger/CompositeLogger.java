@@ -13,7 +13,7 @@ public class CompositeLogger {
     private Database database;
 
     public CompositeLogger(Class clazz, Database database) {
-        logger = LogManager.getLogger(clazz);
+        this.logger = LogManager.getLogger(clazz);
         this.database = database;
     }
 
