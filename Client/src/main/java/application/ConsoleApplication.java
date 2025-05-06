@@ -19,9 +19,8 @@ public class ConsoleApplication implements Runnable {
     @Option(names = {"-p", "--port-number"}, defaultValue = "8888", description = "Server port number")
     private int portNumber;
 
-    @Option(names = {"-i", "--input-directory"}, required = true, description = "Path to the input directory on the server")
-    private String inputDirectory;
-
+    @Option(names = {"-i", "--input-file"}, required = true, description = "Path to the input file on the server")
+    private String inputFile;
 
     @Override
     public void run() {
@@ -34,9 +33,9 @@ public class ConsoleApplication implements Runnable {
 
             logger.log(Level.INFO, "Sending request to the server...");
 
-            String response = client.sendData(inputDirectory);
+            String outputFile = client.sendData(inputFile);
 
-            logger.log(Level.INFO, response);
+            logger.log(Level.INFO, String.format("Decrypted file path: %s", outputFile));
 
             logger.log(Level.INFO, "Disconnecting from the server...");
         } catch (IllegalArgumentException | UnknownHostException ex) {

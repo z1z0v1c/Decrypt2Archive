@@ -60,9 +60,9 @@ public class Server implements Closeable {
 
         fileProcessor.process(inputFile, outputFile, key);
 
-        logger.log(Level.INFO, String.format("File decrypted successfully: %s", outputFile));
+        logger.log(Level.INFO, "File decrypted successfully.");
 
-        socketConnection.sendResponse(String.format("File decrypted successfully: %s", outputFile));
+        socketConnection.sendResponse(outputFile);
 
         logger.log(Level.INFO, "Shutting down the server...");
     }
