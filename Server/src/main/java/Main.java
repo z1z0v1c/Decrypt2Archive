@@ -8,10 +8,10 @@ public class Main {
     private static final Logger logger = LogManager.getLogger(Main.class);
 
     public static void main(String[] args) {
-        logger.log(Level.INFO, "Starting the server...");
+        logger.log(Level.INFO, "Starting the application...");
 
         CommandLine.run(new ConsoleApplication(), args);
 
-        logger.log(Level.INFO, "Shutting down the server...");
+        logger.log(Level.INFO, "Shutting down the application...");
     }
 }
